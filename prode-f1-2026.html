@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRODE F1 2026 — Championship Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3e;
+    --red: #e8002d;
+    --red2: #ff1744;
+    --gold: #ffd700;
+    --silver: #c0c0c0;
+    --bronze: #cd7f32;
+    --text: #e8e8f0;
+    --muted: #6a6a8a;
+    --accent: #00d2ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(232,0,45,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,0,45,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .f1-logo-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .f1-bar {
+    height: 3px;
+    flex: 1;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    max-width: 200px;
+  }
+
+  .f1-badge {
+    background: var(--red);
+    color: white;
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 3px;
+    padding: 4px 12px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(22px, 5vw, 42px);
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+
+  h1 span { color: var(--red); }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--red);
+    padding: 14px 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 30px; height: 30px;
+    background: var(--red);
+    opacity: 0.08;
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .stat-value {
+    font-family: 'Orbitron', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .stat-sub {
+    font-size: 12px;
+    color: var(--red);
+    margin-top: 2px;
+    font-weight: 600;
+  }
+
+  /* Podium */
+  .podium-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .podium-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+
+  .podium-card:hover { transform: translateY(-3px); }
+
+  .podium-card.p1 { border-top: 3px solid var(--gold); }
+  .podium-card.p2 { border-top: 3px solid var(--silver); }
+  .podium-card.p3 { border-top: 3px solid var(--bronze); }
+
+  .podium-pos {
+    font-family: 'Orbitron', monospace;
+    font-size: 28px;
+    font-weight: 900;
+    opacity: 0.15;
+    position: absolute;
+    top: 8px; right: 12px;
+    line-height: 1;
+  }
+
+  .p1 .podium-pos { color: var(--gold); opacity: 0.3; }
+  .p2 .podium-pos { color: var(--silver); opacity: 0.3; }
+  .p3 .podium-pos { color: var(--bronze); opacity: 0.3; }
+
+  .podium-medal { font-size: 24px; display: block; margin-bottom: 6px; }
+  .podium-name {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(10px, 1.8vw, 13px);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .podium-pts {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .p1 .podium-pts { color: var(--gold); }
+  .p2 .podium-pts { color: var(--silver); }
+  .p3 .podium-pts { color: var(--bronze); }
+  .podium-gap { font-size: 11px; color: var(--muted); letter-spacing: 1px; }
+
+  /* Controls */
+  .controls {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .controls-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .btn {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  }
+
+  .btn:hover, .btn.active {
+    background: var(--red);
+    border-color: var(--red);
+    color: white;
+  }
+
+  .chart-toggle-group { display: flex; gap: 8px; margin-left: auto; }
+
+  .toggle-btn {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .toggle-btn:hover, .toggle-btn.active {
+    background: var(--surface2);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Player filter chips */
+  .players-filter {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 14px 20px;
+    margin-bottom: 20px;
+  }
+
+  .filter-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 5px 12px;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: white;
+    opacity: 0.4;
+  }
+
+  .chip.active { opacity: 1; box-shadow: 0 0 8px rgba(255,255,255,0.15); }
+
+  /* Charts */
+  .chart-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .chart-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .chart-title::before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 16px;
+    background: var(--red);
+  }
+
+  .chart-wrapper {
+    position: relative;
+    height: 380px;
+  }
+
+  /* Ranking table */
+  .ranking-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .ranking-header {
+    display: grid;
+    grid-template-columns: 44px 1fr 100px 100px 80px;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .ranking-row {
+    display: grid;
+    grid-template-columns: 44px 1fr 100px 100px 80px;
+    gap: 8px;
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(42,42,62,0.5);
+    align-items: center;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+
+  .ranking-row:hover { background: var(--surface2); }
+  .ranking-row.highlighted { background: rgba(232,0,45,0.06); }
+
+  .rank-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .rank-1 { color: var(--gold); }
+  .rank-2 { color: var(--silver); }
+  .rank-3 { color: var(--bronze); }
+
+  .rank-name {
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .color-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .rank-pts {
+    font-family: 'Orbitron', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: right;
+  }
+
+  .rank-gp {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .rank-trend {
+    text-align: right;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .trend-up { color: #00e676; }
+  .trend-same { color: var(--muted); }
+
+  .teams-ranking-header,
+  #teamsRankingTable .ranking-row {
+    grid-template-columns: 44px 1fr 100px 100px 80px;
+  }
+    height: 3px;
+    background: var(--border);
+    margin-top: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+
+  /* Section divider */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 20px;
+  }
+
+  .section-divider span {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .section-divider::before, .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  footer {
+    text-align: center;
+    padding: 24px 0 12px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 640px) {
+    /* Pilots table: hide last 2 columns, keep pos + name + total */
+    #rankingTable .ranking-row,
+    .ranking-section > .ranking-header {
+      grid-template-columns: 36px 1fr 70px !important;
+    }
+    #rankingTable .ranking-row > *:nth-child(n+4),
+    .ranking-section > .ranking-header > *:nth-child(n+4) { display: none !important; }
+
+    /* Teams table: inline style override handled in JS, just hide extras */
+    #teamsRankingTable .ranking-row > *:nth-child(n+4) { display: none !important; }
+
+    .podium-name { font-size: 10px; }
+    .rank-pts { font-size: 13px; }
+    .stat-value { font-size: 16px; }
+    .controls { flex-direction: column; align-items: flex-start; }
+    .chart-toggle-group { margin-left: 0 !important; }
+  }
+
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="f1-logo-bar">
+      <div class="f1-bar"></div>
+      <div class="f1-badge">TEMPORADA 2026</div>
+      <div class="f1-bar"></div>
+    </div>
+    <h1>PRODE <span>F1</span> TRACKER</h1>
+    <div class="subtitle">Championship Evolution · 2026 · 24 Pilots · 2 Rounds</div>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats-bar" id="statsBar"></div>
+
+  <!-- Podium -->
+  <div class="section-divider"><span>CLASIFICACIÓN GENERAL</span></div>
+  <div class="podium-section" id="podiumSection"></div>
+
+  <!-- Ranking table -->
+  <div class="section-divider"><span>TABLA DE POSICIONES</span></div>
+  <div class="ranking-section">
+    <div class="ranking-header" style="display:flex;gap:10px">
+      <div style="min-width:32px">POS</div>
+      <div style="flex:1">PILOTO</div>
+      <div style="text-align:right;flex-shrink:0;min-width:70px">TOTAL / ÚLT.</div>
+    </div>
+    <div id="rankingTable"></div>
+  </div>
+
+  <!-- TEAMS SECTION -->
+  <div class="section-divider" style="margin-top:40px"><span>MUNDIAL DE CONSTRUCTORES</span></div>
+
+  <!-- Teams stats -->
+  <div class="stats-bar" id="teamsStatsBar"></div>
+
+  <!-- Teams podium -->
+  <div class="podium-section" id="teamsPodiumSection"></div>
+
+  <!-- Teams ranking table -->
+  <div class="section-divider"><span>TABLA DE CONSTRUCTORES</span></div>
+  <div class="ranking-section">
+    <div class="ranking-header teams-ranking-header" style="display:flex;gap:10px">
+      <div style="min-width:32px">POS</div>
+      <div style="flex:1">EQUIPO</div>
+      <div style="text-align:right;flex-shrink:0;min-width:70px">TOTAL / ÚLT.</div>
+    </div>
+    <div id="teamsRankingTable"></div>
+  </div>
+
+  <footer>PRODE F1 2026 · Temporada en curso · 22 GPs restantes</footer>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────
+const RACES = ['Australia (Sprint)', 'China'];
+
+const RAW_DATA = [
+  { name: 'Agustin Fouce',       pts: [176, 111] },
+  { name: 'Manuel Diaz',         pts: [180, 101] },
+  { name: 'Cristian Belen',      pts: [153, 126] },
+  { name: 'Carlos Zanette',      pts: [163, 111] },
+  { name: 'Diego Pereyra',       pts: [162, 100] },
+  { name: 'Fabian Herrera',      pts: [151, 108] },
+  { name: 'Natalia Finkelstein', pts: [141, 112] },
+  { name: 'Sebastian Solanot',   pts: [139, 102] },
+  { name: 'Joan Manonelles',     pts: [121, 111] },
+  { name: 'Fernando Paez',       pts: [117, 114] },
+  { name: 'Sofia Sanabria',      pts: [137,  90] },
+  { name: 'Dario Scarano',       pts: [120, 107] },
+  { name: 'Colombo Mauricio',    pts: [105, 118] },
+  { name: 'Rodrigo Palazzo',     pts: [105, 114] },
+  { name: 'Francisco Irigoyen',  pts: [102, 105] },
+  { name: 'Adrian Mendonca',     pts: [104,  95] },
+  { name: 'Esteban Castro',      pts: [100,  98] },
+  { name: 'Gabriela Labanca',    pts: [ 92, 103] },
+  { name: 'Guido Alvarez',       pts: [ 85, 102] },
+  { name: 'Ignacio Arana',       pts: [ 71,  99] },
+  { name: 'Ignacio Salerno',     pts: [161,   0] },
+  { name: 'Lopez Mauro Eugenia', pts: [100,  61] },
+  { name: 'Priscila Vargas',     pts: [ 74,  66] },
+  { name: 'Ian Vivanco',         pts: [  0, 107] },
+];
+
+// Compute totals & sort
+const players = RAW_DATA.map(p => ({
+  ...p,
+  total: p.pts.reduce((a,b) => a+b, 0),
+  cumulative: p.pts.reduce((acc, v, i) => {
+    acc.push((acc[i-1] || 0) + v);
+    return acc;
+  }, [])
+})).sort((a,b) => b.total - a.total);
+
+// Colors — F1 team-inspired palette
+const COLORS = [
+  '#e8002d','#00d2ff','#ffd700','#00e676','#ff6d00',
+  '#e040fb','#40c4ff','#ff4081','#69f0ae','#ffab40',
+  '#ea80fc','#84ffff','#ff6e40','#b9f6ca','#ffe57f',
+  '#a7ffeb','#cfd8dc','#f8bbd0','#dce775','#80deea',
+  '#ffcc02','#c8e6c9','#ef9a9a','#b3e5fc'
+];
+
+players.forEach((p, i) => { p.color = COLORS[i % COLORS.length]; });
+
+// ── STATE ──────────────────────────────────────────────────────────────
+
+// ── STATS BAR ─────────────────────────────────────────────────────────
+function buildStats() {
+  const leader = players[0];
+  const gap = leader.total - players[1].total;
+  const topScorer = [...RAW_DATA].sort((a,b) => Math.max(...b.pts) - Math.max(...a.pts))[0];
+  const hottest = players.reduce((best, p) => {
+    const last = p.pts[p.pts.length-1];
+    return last > (best.last || 0) ? { name: p.name, last } : best;
+  }, {});
+
+  document.getElementById('statsBar').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Líder</div>
+      <div class="stat-value" style="font-size:14px;letter-spacing:1px">${leader.name.split(' ')[0].toUpperCase()}</div>
+      <div class="stat-sub">${leader.total} PTS</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Ventaja</div>
+      <div class="stat-value">+${gap}</div>
+      <div class="stat-sub">sobre 2°</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">GPs jugados</div>
+      <div class="stat-value">${RACES.length}</div>
+      <div class="stat-sub">de 24 estimados</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Mejor última fecha</div>
+      <div class="stat-value" style="font-size:13px">${hottest.name.split(' ')[0].toUpperCase()}</div>
+      <div class="stat-sub">${hottest.last} pts en China</div>
+    </div>
+  `;
+}
+
+// ── PODIUM ─────────────────────────────────────────────────────────────
+function buildPodium() {
+  const [p1, p2, p3] = players;
+  const maxPts = p1.total;
+
+  const card = (p, cls, medal, pos) => `
+    <div class="podium-card ${cls}">
+      <div class="podium-pos">${pos}</div>
+      <span class="podium-medal">${medal}</span>
+      <div class="podium-name">${p.name}</div>
+      <div class="podium-pts">${p.total}</div>
+      <div class="podium-gap">${pos > 1 ? `-${maxPts - p.total} del líder` : 'LÍDER'}</div>
+    </div>
+  `;
+
+  document.getElementById('podiumSection').innerHTML =
+    card(p1,'p1','🥇',1) + card(p2,'p2','🥈',2) + card(p3,'p3','🥉',3);
+}
+
+// ── RANKING TABLE ──────────────────────────────────────────────────────
+function buildRanking() {
+  const maxPts = players[0].total;
+  const rows = players.map((p, i) => {
+    const posClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
+    const lastPts = p.pts[p.pts.length-1];
+    const bestPts = Math.max(...p.pts);
+    const pct = Math.round((p.total / maxPts) * 100);
+
+    return `
+      <div class="ranking-row" style="display:flex;align-items:center;gap:10px;grid-template-columns:unset">
+        <div class="rank-num ${posClass}" style="min-width:32px">${i+1}</div>
+        <div style="flex:1;min-width:0">
+          <div class="rank-name">
+            <div class="color-dot" style="background:${p.color}"></div>
+            ${p.name}
+          </div>
+          <div class="bar-bg" style="margin-top:4px"><div class="bar-fill" style="width:${pct}%;background:${p.color}"></div></div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="rank-pts">${p.total}</div>
+          <div style="font-size:11px;color:var(--muted)">${lastPts === 0 ? '—' : lastPts + ' pts'}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('rankingTable').innerHTML = rows;
+}
+
+function highlightPlayer(name) {
+  togglePlayer(name);
+  document.querySelectorAll('.ranking-row').forEach((r, i) => {
+    r.classList.toggle('highlighted', players[i].name === name && activeNames.has(name));
+  });
+}
+
+// ── TEAMS DATA ─────────────────────────────────────────────────────────
+const TEAMS_RAW = [
+  { name: 'Diaz / Finkelstein',   p1: 'Manuel Diaz',         p2: 'Natalia Finkelstein' },
+  { name: 'Belen / Zanette',      p1: 'Cristian Belen',      p2: 'Carlos Zanette'      },
+  { name: 'Arana / Vargas',       p1: 'Ignacio Arana',       p2: 'Priscila Vargas'     },
+  { name: 'Pereyra / Mendonca',   p1: 'Diego Pereyra',       p2: 'Adrian Mendonca'     },
+  { name: 'Irigoyen / Sanabria',  p1: 'Francisco Irigoyen',  p2: 'Sofia Sanabria'      },
+  { name: 'Labanca / Scarano',    p1: 'Gabriela Labanca',    p2: 'Dario Scarano'       },
+  { name: 'Herrera / Vivanco',    p1: 'Fabian Herrera',      p2: 'Ian Vivanco'         },
+  { name: 'Fouce / Palazzo',      p1: 'Agustin Fouce',       p2: 'Rodrigo Palazzo'     },
+  { name: 'Solanot / Paez',       p1: 'Sebastian Solanot',   p2: 'Fernando Paez'       },
+  { name: 'Castro / Alvarez',     p1: 'Esteban Castro',      p2: 'Guido Alvarez'       },
+  { name: 'Salerno / Manonelles', p1: 'Ignacio Salerno',     p2: 'Joan Manonelles'     },
+  { name: 'Mauricio / Eugenia',   p1: 'Colombo Mauricio',    p2: 'Lopez Mauro Eugenia' },
+];
+
+const TEAM_COLORS = [
+  '#ff6b35','#7b2fff','#00c896','#ffcc00','#00aaff',
+  '#ff3366','#33ffcc','#ff9900','#aa44ff','#00ff88',
+  '#ff4488','#44aaff'
+];
+
+// Build team pts per race by summing both players
+const teams = TEAMS_RAW.map((t, i) => {
+  const pl1 = RAW_DATA.find(p => p.name === t.p1);
+  const pl2 = RAW_DATA.find(p => p.name === t.p2);
+  const pts = RACES.map((_, ri) => (pl1?.pts[ri] || 0) + (pl2?.pts[ri] || 0));
+  const cumulative = pts.reduce((acc, v, ri) => {
+    acc.push((acc[ri-1] || 0) + v);
+    return acc;
+  }, []);
+  return {
+    name: t.name,
+    p1: t.p1, p2: t.p2,
+    pts,
+    cumulative,
+    total: pts.reduce((a,b) => a+b, 0),
+    color: TEAM_COLORS[i],
+  };
+}).sort((a,b) => b.total - a.total);
+
+// ── TEAMS STATS BAR ────────────────────────────────────────────────────
+function buildTeamsStats() {
+  const leader = teams[0];
+  const gap = leader.total - teams[1].total;
+  const hottest = teams.reduce((best, t) => {
+    const last = t.pts[t.pts.length-1];
+    return last > (best.last||0) ? {name:t.name, last} : best;
+  }, {});
+  document.getElementById('teamsStatsBar').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Equipo Líder</div>
+      <div class="stat-value" style="font-size:12px;letter-spacing:1px">${leader.name}</div>
+      <div class="stat-sub">${leader.total} PTS</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Ventaja</div>
+      <div class="stat-value">+${gap}</div>
+      <div class="stat-sub">sobre 2°</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Equipos</div>
+      <div class="stat-value">${teams.length}</div>
+      <div class="stat-sub">2 pilotos c/u</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Mejor última fecha</div>
+      <div class="stat-value" style="font-size:11px">${hottest.name}</div>
+      <div class="stat-sub">${hottest.last} pts en China</div>
+    </div>
+  `;
+}
+
+// ── TEAMS PODIUM ───────────────────────────────────────────────────────
+function buildTeamsPodium() {
+  const [t1, t2, t3] = teams;
+  const maxPts = t1.total;
+  const card = (t, cls, medal, pos) => `
+    <div class="podium-card ${cls}">
+      <div class="podium-pos">${pos}</div>
+      <span class="podium-medal">${medal}</span>
+      <div class="podium-name" style="font-size:11px">${t.name}</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px">${t.p1} · ${t.p2}</div>
+      <div class="podium-pts">${t.total}</div>
+      <div class="podium-gap">${pos > 1 ? `-${maxPts - t.total} del líder` : 'LÍDER'}</div>
+    </div>
+  `;
+  document.getElementById('teamsPodiumSection').innerHTML =
+    card(t1,'p1','🥇',1) + card(t2,'p2','🥈',2) + card(t3,'p3','🥉',3);
+}
+
+// ── TEAMS RANKING TABLE ────────────────────────────────────────────────
+function buildTeamsRanking() {
+  const maxPts = teams[0].total;
+  const rows = teams.map((t, i) => {
+    const posClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
+    const lastPts = t.pts[t.pts.length-1];
+    const bestPts = Math.max(...t.pts);
+    const pct = Math.round((t.total / maxPts) * 100);
+    return `
+      <div class="ranking-row" style="display:flex;align-items:center;gap:10px;grid-template-columns:unset">
+        <div class="rank-num ${posClass}" style="min-width:32px">${i+1}</div>
+        <div style="flex:1;min-width:0">
+          <div class="rank-name">
+            <div class="color-dot" style="background:${t.color}"></div>
+            ${t.name}
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;padding-left:16px">${t.p1} · ${t.p2}</div>
+          <div class="bar-bg" style="margin-top:4px"><div class="bar-fill" style="width:${pct}%;background:${t.color}"></div></div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="rank-pts">${t.total}</div>
+          <div style="font-size:11px;color:var(--muted)">${lastPts} pts</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  document.getElementById('teamsRankingTable').innerHTML = rows;
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+buildStats();
+buildPodium();
+buildRanking();
+
+// init teams
+buildTeamsStats();
+buildTeamsPodium();
+buildTeamsRanking();
+</script>
+</body>
+</html>

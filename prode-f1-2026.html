@@ -12,13 +12,13 @@
     --surface2: #1a1a26;
     --border: #2a2a3e;
     --red: #e8002d;
-    --red2: #ff1744;
     --gold: #ffd700;
     --silver: #c0c0c0;
     --bronze: #cd7f32;
     --text: #e8e8f0;
     --muted: #6a6a8a;
     --accent: #00d2ff;
+    --green: #00e676;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,7 +31,6 @@
     overflow-x: hidden;
   }
 
-  /* Background grid */
   body::before {
     content: '';
     position: fixed;
@@ -52,11 +51,7 @@
     padding: 24px 16px;
   }
 
-  /* Header */
-  header {
-    text-align: center;
-    margin-bottom: 36px;
-  }
+  header { text-align: center; margin-bottom: 36px; }
 
   .f1-logo-bar {
     display: flex;
@@ -103,7 +98,7 @@
     margin-top: 6px;
   }
 
-  /* Stats bar */
+  /* Stats */
   .stats-bar {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -146,12 +141,7 @@
     color: var(--text);
   }
 
-  .stat-sub {
-    font-size: 12px;
-    color: var(--red);
-    margin-top: 2px;
-    font-weight: 600;
-  }
+  .stat-sub { font-size: 12px; color: var(--red); margin-top: 2px; font-weight: 600; }
 
   /* Podium */
   .podium-section {
@@ -172,7 +162,6 @@
   }
 
   .podium-card:hover { transform: translateY(-3px); }
-
   .podium-card.p1 { border-top: 3px solid var(--gold); }
   .podium-card.p2 { border-top: 3px solid var(--silver); }
   .podium-card.p3 { border-top: 3px solid var(--bronze); }
@@ -200,248 +189,100 @@
     text-transform: uppercase;
     margin-bottom: 4px;
   }
-  .podium-pts {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 2px;
-  }
+  .podium-pts { font-size: 22px; font-weight: 700; margin-bottom: 2px; }
   .p1 .podium-pts { color: var(--gold); }
   .p2 .podium-pts { color: var(--silver); }
   .p3 .podium-pts { color: var(--bronze); }
   .podium-gap { font-size: 11px; color: var(--muted); letter-spacing: 1px; }
 
-  /* Controls */
-  .controls {
+  /* Last GP section */
+  .last-gp-section {
     background: var(--surface);
     border: 1px solid var(--border);
+    border-left: 3px solid var(--red);
     padding: 16px 20px;
     margin-bottom: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    align-items: center;
   }
 
-  .controls-label {
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
-
-  .btn {
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 600;
-    font-size: 12px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 6px 14px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
-  }
-
-  .btn:hover, .btn.active {
-    background: var(--red);
-    border-color: var(--red);
-    color: white;
-  }
-
-  .chart-toggle-group { display: flex; gap: 8px; margin-left: auto; }
-
-  .toggle-btn {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 11px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 6px 12px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .toggle-btn:hover, .toggle-btn.active {
-    background: var(--surface2);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  /* Player filter chips */
-  .players-filter {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 14px 20px;
-    margin-bottom: 20px;
-  }
-
-  .filter-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-
-  .chips-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .chip {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    padding: 5px 12px;
-    border-radius: 2px;
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: all 0.15s;
-    color: white;
-    opacity: 0.4;
-  }
-
-  .chip.active { opacity: 1; box-shadow: 0 0 8px rgba(255,255,255,0.15); }
-
-  /* Charts */
-  .chart-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 20px;
-    margin-bottom: 20px;
-  }
-
-  .chart-title {
+  .last-gp-title {
     font-family: 'Orbitron', monospace;
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 11px;
     letter-spacing: 3px;
+    color: var(--red);
+    margin-bottom: 12px;
     text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 16px;
+  }
+
+  .last-gp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .last-gp-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 12px;
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
-  .chart-title::before {
-    content: '';
-    display: block;
-    width: 3px;
-    height: 16px;
-    background: var(--red);
+  .last-gp-pos {
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    font-weight: 900;
+    min-width: 28px;
   }
 
-  .chart-wrapper {
-    position: relative;
-    height: 380px;
-  }
+  .last-gp-info { flex: 1; min-width: 0; }
+  .last-gp-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .last-gp-pts { font-size: 11px; color: var(--muted); }
 
-  /* Ranking table */
-  .ranking-section {
+  /* Projection section */
+  .projection-section {
     background: var(--surface);
     border: 1px solid var(--border);
-    overflow: hidden;
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    margin-bottom: 20px;
   }
 
-  .ranking-header {
-    display: grid;
-    grid-template-columns: 44px 1fr 100px 100px 80px;
-    gap: 8px;
-    padding: 10px 16px;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--muted);
+  .projection-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 12px;
     text-transform: uppercase;
   }
 
-  .ranking-row {
+  .projection-grid {
     display: grid;
-    grid-template-columns: 44px 1fr 100px 100px 80px;
-    gap: 8px;
-    padding: 10px 16px;
-    border-bottom: 1px solid rgba(42,42,62,0.5);
-    align-items: center;
-    transition: background 0.15s;
-    cursor: pointer;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
   }
 
-  .ranking-row:hover { background: var(--surface2); }
-  .ranking-row.highlighted { background: rgba(232,0,45,0.06); }
-
-  .rank-num {
-    font-family: 'Orbitron', monospace;
-    font-size: 14px;
-    font-weight: 700;
-    text-align: center;
-  }
-
-  .rank-1 { color: var(--gold); }
-  .rank-2 { color: var(--silver); }
-  .rank-3 { color: var(--bronze); }
-
-  .rank-name {
-    font-size: 14px;
-    font-weight: 600;
+  .projection-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
 
-  .color-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .rank-pts {
+  .proj-rank {
     font-family: 'Orbitron', monospace;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
-    text-align: right;
-  }
-
-  .rank-gp {
-    font-size: 13px;
+    min-width: 24px;
     color: var(--muted);
-    text-align: center;
   }
 
-  .rank-trend {
-    text-align: right;
-    font-size: 12px;
-    font-weight: 600;
-  }
-
-  .trend-up { color: #00e676; }
-  .trend-same { color: var(--muted); }
-
-  .teams-ranking-header,
-  #teamsRankingTable .ranking-row {
-    grid-template-columns: 44px 1fr 100px 100px 80px;
-  }
-    height: 3px;
-    background: var(--border);
-    margin-top: 4px;
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .bar-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.6s ease;
-  }
+  .proj-info { flex: 1; min-width: 0; }
+  .proj-name { font-size: 13px; font-weight: 600; }
+  .proj-pts { font-size: 11px; color: var(--accent); font-weight: 600; }
 
   /* Section divider */
   .section-divider {
@@ -466,6 +307,208 @@
     background: var(--border);
   }
 
+  /* Ranking */
+  .ranking-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .ranking-header {
+    display: flex;
+    gap: 10px;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .ranking-row {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(42,42,62,0.5);
+    transition: background 0.15s;
+  }
+
+  .ranking-row:hover { background: var(--surface2); }
+  .ranking-row.highlighted { background: rgba(232,0,45,0.06); }
+
+  .rank-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .rank-1 { color: var(--gold); }
+  .rank-2 { color: var(--silver); }
+  .rank-3 { color: var(--bronze); }
+
+  .rank-name {
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .color-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  .rank-pts {
+    font-family: 'Orbitron', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: right;
+  }
+
+  .bar-bg {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+
+  /* Trend arrows */
+  .trend-up { color: var(--green); font-size: 13px; }
+  .trend-down { color: var(--red); font-size: 13px; }
+  .trend-same { color: var(--muted); font-size: 13px; }
+
+  /* Tooltip */
+  .tooltip-wrap { position: relative; }
+  .tooltip-wrap:hover .tooltip-box { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+  .tooltip-box {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--red);
+    padding: 10px 14px;
+    min-width: 200px;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s;
+    font-size: 12px;
+  }
+
+  .tooltip-box::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--border);
+  }
+
+  .tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 3px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tooltip-row:last-child { border-bottom: none; }
+  .tooltip-label { color: var(--muted); }
+  .tooltip-val { font-weight: 700; color: var(--text); }
+  .tooltip-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--red);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  /* Head to head */
+  .h2h-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+
+  .h2h-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .h2h-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(42,42,62,0.4);
+  }
+
+  .h2h-row:last-child { border-bottom: none; }
+
+  .h2h-name {
+    font-size: 12px;
+    font-weight: 600;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .h2h-name.winner { color: var(--green); }
+  .h2h-name.loser { color: var(--muted); }
+
+  .h2h-bar-wrap {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 16px;
+  }
+
+  .h2h-bar-left {
+    height: 100%;
+    border-radius: 2px 0 0 2px;
+    transition: width 0.5s;
+  }
+
+  .h2h-bar-right {
+    height: 100%;
+    border-radius: 0 2px 2px 0;
+    transition: width 0.5s;
+    opacity: 0.5;
+  }
+
+  .h2h-pts {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 36px;
+    text-align: right;
+  }
+
+  .h2h-pts.winner { color: var(--green); }
+  .h2h-pts.loser { color: var(--muted); }
+
+  .h2h-vs {
+    font-size: 10px;
+    color: var(--muted);
+    min-width: 18px;
+    text-align: center;
+  }
+
   footer {
     text-align: center;
     padding: 24px 0 12px;
@@ -476,22 +519,9 @@
   }
 
   @media (max-width: 640px) {
-    /* Pilots table: hide last 2 columns, keep pos + name + total */
-    #rankingTable .ranking-row,
-    .ranking-section > .ranking-header {
-      grid-template-columns: 36px 1fr 70px !important;
-    }
-    #rankingTable .ranking-row > *:nth-child(n+4),
-    .ranking-section > .ranking-header > *:nth-child(n+4) { display: none !important; }
-
-    /* Teams table: inline style override handled in JS, just hide extras */
-    #teamsRankingTable .ranking-row > *:nth-child(n+4) { display: none !important; }
-
-    .podium-name { font-size: 10px; }
-    .rank-pts { font-size: 13px; }
-    .stat-value { font-size: 16px; }
-    .controls { flex-direction: column; align-items: flex-start; }
-    .chart-toggle-group { margin-left: 0 !important; }
+    .last-gp-grid { grid-template-columns: 1fr; }
+    .projection-grid { grid-template-columns: 1fr 1fr; }
+    .h2h-name { font-size: 11px; }
   }
 
   @media print {
@@ -502,7 +532,6 @@
 <body>
 <div class="container">
 
-  <!-- Header -->
   <header>
     <div class="f1-logo-bar">
       <div class="f1-bar"></div>
@@ -513,40 +542,46 @@
     <div class="subtitle">Championship Evolution · 2026 · 24 Pilots · 2 Rounds</div>
   </header>
 
-  <!-- Stats -->
   <div class="stats-bar" id="statsBar"></div>
 
-  <!-- Podium -->
   <div class="section-divider"><span>CLASIFICACIÓN GENERAL</span></div>
   <div class="podium-section" id="podiumSection"></div>
 
-  <!-- Ranking table -->
+  <!-- ÚLTIMO GP -->
+  <div class="last-gp-section">
+    <div class="last-gp-title" id="lastGpTitle">🏁 Podio — Última Fecha</div>
+    <div class="last-gp-grid" id="lastGpGrid"></div>
+  </div>
+
+  <!-- TABLA DE POSICIONES -->
   <div class="section-divider"><span>TABLA DE POSICIONES</span></div>
   <div class="ranking-section">
     <div class="ranking-header" style="display:flex;gap:10px">
       <div style="min-width:32px">POS</div>
       <div style="flex:1">PILOTO</div>
-      <div style="text-align:right;flex-shrink:0;min-width:70px">TOTAL / ÚLT.</div>
+      <div style="text-align:right;flex-shrink:0;min-width:80px">TOTAL / GAP</div>
     </div>
     <div id="rankingTable"></div>
   </div>
 
-  <!-- TEAMS SECTION -->
+  <!-- EQUIPOS -->
   <div class="section-divider" style="margin-top:40px"><span>MUNDIAL DE CONSTRUCTORES</span></div>
-
-  <!-- Teams stats -->
   <div class="stats-bar" id="teamsStatsBar"></div>
-
-  <!-- Teams podium -->
   <div class="podium-section" id="teamsPodiumSection"></div>
 
-  <!-- Teams ranking table -->
+  <!-- HEAD TO HEAD -->
+  <div class="h2h-section">
+    <div class="h2h-title">⚔️ Head to Head — Integrantes por Equipo</div>
+    <div id="h2hGrid"></div>
+  </div>
+
+  <!-- TABLA CONSTRUCTORES -->
   <div class="section-divider"><span>TABLA DE CONSTRUCTORES</span></div>
   <div class="ranking-section">
     <div class="ranking-header teams-ranking-header" style="display:flex;gap:10px">
       <div style="min-width:32px">POS</div>
       <div style="flex:1">EQUIPO</div>
-      <div style="text-align:right;flex-shrink:0;min-width:70px">TOTAL / ÚLT.</div>
+      <div style="text-align:right;flex-shrink:0;min-width:80px">TOTAL / GAP</div>
     </div>
     <div id="teamsRankingTable"></div>
   </div>
@@ -557,6 +592,7 @@
 <script>
 // ── DATA ──────────────────────────────────────────────────────────────
 const RACES = ['Australia (Sprint)', 'China'];
+const TOTAL_GPS = 24;
 
 const RAW_DATA = [
   { name: 'Agustin Fouce',       pts: [176, 111] },
@@ -585,120 +621,6 @@ const RAW_DATA = [
   { name: 'Ian Vivanco',         pts: [  0, 107] },
 ];
 
-// Compute totals & sort
-const players = RAW_DATA.map(p => ({
-  ...p,
-  total: p.pts.reduce((a,b) => a+b, 0),
-  cumulative: p.pts.reduce((acc, v, i) => {
-    acc.push((acc[i-1] || 0) + v);
-    return acc;
-  }, [])
-})).sort((a,b) => b.total - a.total);
-
-// Colors — F1 team-inspired palette
-const COLORS = [
-  '#e8002d','#00d2ff','#ffd700','#00e676','#ff6d00',
-  '#e040fb','#40c4ff','#ff4081','#69f0ae','#ffab40',
-  '#ea80fc','#84ffff','#ff6e40','#b9f6ca','#ffe57f',
-  '#a7ffeb','#cfd8dc','#f8bbd0','#dce775','#80deea',
-  '#ffcc02','#c8e6c9','#ef9a9a','#b3e5fc'
-];
-
-players.forEach((p, i) => { p.color = COLORS[i % COLORS.length]; });
-
-// ── STATE ──────────────────────────────────────────────────────────────
-
-// ── STATS BAR ─────────────────────────────────────────────────────────
-function buildStats() {
-  const leader = players[0];
-  const gap = leader.total - players[1].total;
-  const topScorer = [...RAW_DATA].sort((a,b) => Math.max(...b.pts) - Math.max(...a.pts))[0];
-  const hottest = players.reduce((best, p) => {
-    const last = p.pts[p.pts.length-1];
-    return last > (best.last || 0) ? { name: p.name, last } : best;
-  }, {});
-
-  document.getElementById('statsBar').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-label">Líder</div>
-      <div class="stat-value" style="font-size:14px;letter-spacing:1px">${leader.name.split(' ')[0].toUpperCase()}</div>
-      <div class="stat-sub">${leader.total} PTS</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Ventaja</div>
-      <div class="stat-value">+${gap}</div>
-      <div class="stat-sub">sobre 2°</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">GPs jugados</div>
-      <div class="stat-value">${RACES.length}</div>
-      <div class="stat-sub">de 24 estimados</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Mejor última fecha</div>
-      <div class="stat-value" style="font-size:13px">${hottest.name.split(' ')[0].toUpperCase()}</div>
-      <div class="stat-sub">${hottest.last} pts en China</div>
-    </div>
-  `;
-}
-
-// ── PODIUM ─────────────────────────────────────────────────────────────
-function buildPodium() {
-  const [p1, p2, p3] = players;
-  const maxPts = p1.total;
-
-  const card = (p, cls, medal, pos) => `
-    <div class="podium-card ${cls}">
-      <div class="podium-pos">${pos}</div>
-      <span class="podium-medal">${medal}</span>
-      <div class="podium-name">${p.name}</div>
-      <div class="podium-pts">${p.total}</div>
-      <div class="podium-gap">${pos > 1 ? `-${maxPts - p.total} del líder` : 'LÍDER'}</div>
-    </div>
-  `;
-
-  document.getElementById('podiumSection').innerHTML =
-    card(p1,'p1','🥇',1) + card(p2,'p2','🥈',2) + card(p3,'p3','🥉',3);
-}
-
-// ── RANKING TABLE ──────────────────────────────────────────────────────
-function buildRanking() {
-  const maxPts = players[0].total;
-  const rows = players.map((p, i) => {
-    const posClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
-    const lastPts = p.pts[p.pts.length-1];
-    const bestPts = Math.max(...p.pts);
-    const pct = Math.round((p.total / maxPts) * 100);
-
-    return `
-      <div class="ranking-row" style="display:flex;align-items:center;gap:10px;grid-template-columns:unset">
-        <div class="rank-num ${posClass}" style="min-width:32px">${i+1}</div>
-        <div style="flex:1;min-width:0">
-          <div class="rank-name">
-            <div class="color-dot" style="background:${p.color}"></div>
-            ${p.name}
-          </div>
-          <div class="bar-bg" style="margin-top:4px"><div class="bar-fill" style="width:${pct}%;background:${p.color}"></div></div>
-        </div>
-        <div style="text-align:right;flex-shrink:0">
-          <div class="rank-pts">${p.total}</div>
-          <div style="font-size:11px;color:var(--muted)">${lastPts === 0 ? '—' : lastPts + ' pts'}</div>
-        </div>
-      </div>
-    `;
-  }).join('');
-
-  document.getElementById('rankingTable').innerHTML = rows;
-}
-
-function highlightPlayer(name) {
-  togglePlayer(name);
-  document.querySelectorAll('.ranking-row').forEach((r, i) => {
-    r.classList.toggle('highlighted', players[i].name === name && activeNames.has(name));
-  });
-}
-
-// ── TEAMS DATA ─────────────────────────────────────────────────────────
 const TEAMS_RAW = [
   { name: 'Diaz / Finkelstein',   p1: 'Manuel Diaz',         p2: 'Natalia Finkelstein' },
   { name: 'Belen / Zanette',      p1: 'Cristian Belen',      p2: 'Carlos Zanette'      },
@@ -714,39 +636,212 @@ const TEAMS_RAW = [
   { name: 'Mauricio / Eugenia',   p1: 'Colombo Mauricio',    p2: 'Lopez Mauro Eugenia' },
 ];
 
+const COLORS = [
+  '#e8002d','#00d2ff','#ffd700','#00e676','#ff6d00',
+  '#e040fb','#40c4ff','#ff4081','#69f0ae','#ffab40',
+  '#ea80fc','#84ffff','#ff6e40','#b9f6ca','#ffe57f',
+  '#a7ffeb','#cfd8dc','#f8bbd0','#dce775','#80deea',
+  '#ffcc02','#c8e6c9','#ef9a9a','#b3e5fc'
+];
+
 const TEAM_COLORS = [
   '#ff6b35','#7b2fff','#00c896','#ffcc00','#00aaff',
   '#ff3366','#33ffcc','#ff9900','#aa44ff','#00ff88',
   '#ff4488','#44aaff'
 ];
 
-// Build team pts per race by summing both players
+// ── BUILD PLAYERS ─────────────────────────────────────────────────────
+const players = RAW_DATA.map((p, i) => ({
+  ...p,
+  total: p.pts.reduce((a,b) => a+b, 0),
+  avg: p.pts.filter(x => x > 0).reduce((a,b,_,arr) => a + b/arr.length, 0),
+  best: Math.max(...p.pts),
+  worst: Math.min(...p.pts.filter(x => x > 0)),
+  color: COLORS[i],
+})).sort((a,b) => b.total - a.total);
+
+// Ranking por fecha anterior para calcular tendencia
+function rankAtRace(idx) {
+  return [...players].sort((a,b) => {
+    const sa = a.pts.slice(0,idx+1).reduce((x,y)=>x+y,0);
+    const sb = b.pts.slice(0,idx+1).reduce((x,y)=>x+y,0);
+    return sb - sa;
+  }).reduce((m,p,i) => { m[p.name]=i+1; return m; }, {});
+}
+
+const prevRank = RACES.length >= 2 ? rankAtRace(RACES.length - 2) : null;
+
+// ── BUILD TEAMS ───────────────────────────────────────────────────────
 const teams = TEAMS_RAW.map((t, i) => {
   const pl1 = RAW_DATA.find(p => p.name === t.p1);
   const pl2 = RAW_DATA.find(p => p.name === t.p2);
-  const pts = RACES.map((_, ri) => (pl1?.pts[ri] || 0) + (pl2?.pts[ri] || 0));
-  const cumulative = pts.reduce((acc, v, ri) => {
-    acc.push((acc[ri-1] || 0) + v);
-    return acc;
-  }, []);
+  const pts = RACES.map((_, ri) => (pl1?.pts[ri]||0) + (pl2?.pts[ri]||0));
+  const p1total = pl1?.pts.reduce((a,b)=>a+b,0) || 0;
+  const p2total = pl2?.pts.reduce((a,b)=>a+b,0) || 0;
   return {
-    name: t.name,
-    p1: t.p1, p2: t.p2,
-    pts,
-    cumulative,
-    total: pts.reduce((a,b) => a+b, 0),
+    name: t.name, p1: t.p1, p2: t.p2,
+    pts, total: pts.reduce((a,b)=>a+b,0),
+    p1total, p2total,
     color: TEAM_COLORS[i],
   };
 }).sort((a,b) => b.total - a.total);
 
-// ── TEAMS STATS BAR ────────────────────────────────────────────────────
+// ── STATS BAR ─────────────────────────────────────────────────────────
+function buildStats() {
+  const leader = players[0];
+  const gap = leader.total - players[1].total;
+  const hottest = [...players].sort((a,b) => b.pts[b.pts.length-1] - a.pts[a.pts.length-1])[0];
+  const mostConsistent = [...players]
+    .filter(p => p.pts.every(x => x > 0)) // solo jugadores sin 0s
+    .sort((a,b) => {
+      const stdA = Math.sqrt(a.pts.reduce((s,p)=>s+Math.pow(p-a.avg,2),0)/a.pts.length);
+      const stdB = Math.sqrt(b.pts.reduce((s,p)=>s+Math.pow(p-b.avg,2),0)/b.pts.length);
+      return stdA - stdB;
+    })[0];
+
+  document.getElementById('statsBar').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Líder</div>
+      <div class="stat-value" style="font-size:14px;letter-spacing:1px">${leader.name.split(' ')[0].toUpperCase()}</div>
+      <div class="stat-sub">${leader.total} PTS</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Ventaja</div>
+      <div class="stat-value">+${gap}</div>
+      <div class="stat-sub">sobre 2°</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">GPs jugados</div>
+      <div class="stat-value">${RACES.length}</div>
+      <div class="stat-sub">de ${TOTAL_GPS} en temporada</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Mejor última fecha</div>
+      <div class="stat-value" style="font-size:13px">${hottest.name.split(' ')[0].toUpperCase()}</div>
+      <div class="stat-sub">${hottest.pts[hottest.pts.length-1]} pts en ${RACES[RACES.length-1]}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Más consistente</div>
+      <div class="stat-value" style="font-size:13px">${mostConsistent.name.split(' ')[0].toUpperCase()}</div>
+      <div class="stat-sub">prom. ${Math.round(mostConsistent.avg)} pts/GP</div>
+    </div>
+  `;
+}
+
+// ── PODIUM ─────────────────────────────────────────────────────────────
+function buildPodium() {
+  const [p1, p2, p3] = players;
+  const maxPts = p1.total;
+  const card = (p, cls, medal, pos) => `
+    <div class="podium-card ${cls}">
+      <div class="podium-pos">${pos}</div>
+      <span class="podium-medal">${medal}</span>
+      <div class="podium-name">${p.name}</div>
+      <div class="podium-pts">${p.total}</div>
+      <div class="podium-gap">${pos > 1 ? `-${maxPts - p.total} del líder` : 'LÍDER'}</div>
+    </div>
+  `;
+  document.getElementById('podiumSection').innerHTML =
+    card(p1,'p1','🥇',1) + card(p2,'p2','🥈',2) + card(p3,'p3','🥉',3);
+}
+
+// ── ÚLTIMO GP ──────────────────────────────────────────────────────────
+function buildLastGp() {
+  const lastRace = RACES[RACES.length - 1];
+  const lastIdx = RACES.length - 1;
+  document.getElementById('lastGpTitle').textContent = `🏁 Podio — ${lastRace}`;
+
+  const sorted = [...players]
+    .filter(p => p.pts[lastIdx] > 0)
+    .sort((a,b) => b.pts[lastIdx] - a.pts[lastIdx])
+    .slice(0, 3);
+
+  const medals = ['🥇','🥈','🥉'];
+  const colors = ['var(--gold)','var(--silver)','var(--bronze)'];
+
+  document.getElementById('lastGpGrid').innerHTML = sorted.map((p, i) => `
+    <div class="last-gp-card">
+      <div class="last-gp-pos" style="color:${colors[i]}">${medals[i]}</div>
+      <div class="last-gp-info">
+        <div class="last-gp-name">${p.name}</div>
+        <div class="last-gp-pts">${p.pts[lastIdx]} pts en esta fecha</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── RANKING TABLE ──────────────────────────────────────────────────────
+function buildRanking() {
+  const maxPts = players[0].total;
+  const leaderPts = players[0].total;
+
+  const rows = players.map((p, i) => {
+    const posClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
+    const lastPts = p.pts[p.pts.length-1];
+    const pct = Math.round((p.total / maxPts) * 100);
+    const gap = i === 0 ? '' : `-${leaderPts - p.total}`;
+
+    // Tendencia
+    let trendHtml = '';
+    if (prevRank) {
+      const curPos = i + 1;
+      const oldPos = prevRank[p.name] || curPos;
+      if (curPos < oldPos) trendHtml = `<span class="trend-up">▲${oldPos - curPos}</span>`;
+      else if (curPos > oldPos) trendHtml = `<span class="trend-down">▼${curPos - oldPos}</span>`;
+      else trendHtml = `<span class="trend-same">—</span>`;
+    }
+
+    // Tooltip con stats
+    const tooltip = `
+      <div class="tooltip-box">
+        <div class="tooltip-title">${p.name}</div>
+        ${RACES.map((r, ri) => `
+          <div class="tooltip-row">
+            <span class="tooltip-label">${r}</span>
+            <span class="tooltip-val">${p.pts[ri] === 0 ? '—' : p.pts[ri] + ' pts'}</span>
+          </div>
+        `).join('')}
+        <div class="tooltip-row">
+          <span class="tooltip-label">Mejor GP</span>
+          <span class="tooltip-val" style="color:var(--green)">${p.best} pts</span>
+        </div>
+        <div class="tooltip-row">
+          <span class="tooltip-label">Promedio</span>
+          <span class="tooltip-val">${Math.round(p.avg)} pts/GP</span>
+        </div>
+      </div>
+    `;
+
+    return `
+      <div class="ranking-row" style="display:flex;align-items:center;gap:10px">
+        <div class="rank-num ${posClass}" style="min-width:32px">${i+1}</div>
+        <div style="flex:1;min-width:0">
+          <div class="tooltip-wrap">
+            <div class="rank-name">
+              <div class="color-dot" style="background:${p.color}"></div>
+              ${p.name}
+              ${trendHtml}
+            </div>
+            ${tooltip}
+          </div>
+          <div class="bar-bg" style="margin-top:4px"><div class="bar-fill" style="width:${pct}%;background:${p.color}"></div></div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="rank-pts">${p.total}</div>
+          <div style="font-size:11px;color:${i===0?'var(--green)':'var(--red)'}">${i===0 ? 'LÍDER' : gap}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('rankingTable').innerHTML = rows;
+}
+
+// ── TEAMS STATS ───────────────────────────────────────────────────────
 function buildTeamsStats() {
   const leader = teams[0];
   const gap = leader.total - teams[1].total;
-  const hottest = teams.reduce((best, t) => {
-    const last = t.pts[t.pts.length-1];
-    return last > (best.last||0) ? {name:t.name, last} : best;
-  }, {});
+  const hottest = [...teams].sort((a,b) => b.pts[b.pts.length-1] - a.pts[a.pts.length-1])[0];
   document.getElementById('teamsStatsBar').innerHTML = `
     <div class="stat-card">
       <div class="stat-label">Equipo Líder</div>
@@ -765,13 +860,13 @@ function buildTeamsStats() {
     </div>
     <div class="stat-card">
       <div class="stat-label">Mejor última fecha</div>
-      <div class="stat-value" style="font-size:11px">${hottest.name}</div>
-      <div class="stat-sub">${hottest.last} pts en China</div>
+      <div class="stat-value" style="font-size:11px">${hottest.name.split('/')[0].trim().toUpperCase()}</div>
+      <div class="stat-sub">${hottest.pts[hottest.pts.length-1]} pts en ${RACES[RACES.length-1]}</div>
     </div>
   `;
 }
 
-// ── TEAMS PODIUM ───────────────────────────────────────────────────────
+// ── TEAMS PODIUM ──────────────────────────────────────────────────────
 function buildTeamsPodium() {
   const [t1, t2, t3] = teams;
   const maxPts = t1.total;
@@ -782,6 +877,7 @@ function buildTeamsPodium() {
       <div class="podium-name" style="font-size:11px">${t.name}</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:4px">${t.p1} · ${t.p2}</div>
       <div class="podium-pts">${t.total}</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">${t.p1.split(' ')[0]}: ${t.p1total} · ${t.p2.split(' ')[0]}: ${t.p2total}</div>
       <div class="podium-gap">${pos > 1 ? `-${maxPts - t.total} del líder` : 'LÍDER'}</div>
     </div>
   `;
@@ -789,28 +885,58 @@ function buildTeamsPodium() {
     card(t1,'p1','🥇',1) + card(t2,'p2','🥈',2) + card(t3,'p3','🥉',3);
 }
 
-// ── TEAMS RANKING TABLE ────────────────────────────────────────────────
+// ── HEAD TO HEAD ──────────────────────────────────────────────────────
+function buildH2H() {
+  const rows = teams.map(t => {
+    const total = t.p1total + t.p2total;
+    const p1pct = total > 0 ? (t.p1total / total * 100) : 50;
+    const p2pct = 100 - p1pct;
+    const p1wins = t.p1total >= t.p2total;
+
+    return `
+      <div class="h2h-row">
+        <div class="h2h-name ${p1wins ? 'winner' : 'loser'}">${t.p1.split(' ')[0]}</div>
+        <div class="h2h-pts ${p1wins ? 'winner' : 'loser'}">${t.p1total}</div>
+        <div class="h2h-bar-wrap">
+          <div class="h2h-bar-left" style="width:${p1pct}%;background:${t.color}"></div>
+          <div class="h2h-bar-right" style="width:${p2pct}%;background:${t.color}"></div>
+        </div>
+        <div class="h2h-pts ${!p1wins ? 'winner' : 'loser'}">${t.p2total}</div>
+        <div class="h2h-name ${!p1wins ? 'winner' : 'loser'}" style="text-align:right">${t.p2.split(' ')[0]}</div>
+      </div>
+    `;
+  }).join('');
+  document.getElementById('h2hGrid').innerHTML = rows;
+}
+
+// ── TEAMS RANKING ─────────────────────────────────────────────────────
 function buildTeamsRanking() {
   const maxPts = teams[0].total;
+  const leaderPts = teams[0].total;
+
   const rows = teams.map((t, i) => {
     const posClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
     const lastPts = t.pts[t.pts.length-1];
-    const bestPts = Math.max(...t.pts);
     const pct = Math.round((t.total / maxPts) * 100);
+    const gap = i === 0 ? '' : `-${leaderPts - t.total}`;
+
     return `
-      <div class="ranking-row" style="display:flex;align-items:center;gap:10px;grid-template-columns:unset">
+      <div class="ranking-row" style="display:flex;align-items:center;gap:10px">
         <div class="rank-num ${posClass}" style="min-width:32px">${i+1}</div>
         <div style="flex:1;min-width:0">
           <div class="rank-name">
             <div class="color-dot" style="background:${t.color}"></div>
             ${t.name}
           </div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px;padding-left:16px">${t.p1} · ${t.p2}</div>
-          <div class="bar-bg" style="margin-top:4px"><div class="bar-fill" style="width:${pct}%;background:${t.color}"></div></div>
+          <div style="font-size:11px;color:var(--muted);margin:2px 0 4px 16px">
+            ${t.p1.split(' ')[0]}: <strong style="color:var(--text)">${t.p1total}</strong> &nbsp;·&nbsp;
+            ${t.p2.split(' ')[0]}: <strong style="color:var(--text)">${t.p2total}</strong>
+          </div>
+          <div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${t.color}"></div></div>
         </div>
         <div style="text-align:right;flex-shrink:0">
           <div class="rank-pts">${t.total}</div>
-          <div style="font-size:11px;color:var(--muted)">${lastPts} pts</div>
+          <div style="font-size:11px;color:${i===0?'var(--green)':'var(--red)'}">${i===0 ? 'LÍDER' : gap}</div>
         </div>
       </div>
     `;
@@ -821,11 +947,11 @@ function buildTeamsRanking() {
 // ── INIT ──────────────────────────────────────────────────────────────
 buildStats();
 buildPodium();
+buildLastGp();
 buildRanking();
-
-// init teams
 buildTeamsStats();
 buildTeamsPodium();
+buildH2H();
 buildTeamsRanking();
 </script>
 </body>

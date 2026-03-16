@@ -384,9 +384,7 @@
 
   .tooltip-box {
     position: absolute;
-    top: calc(100% + 8px);
     left: 0;
-    transform: translateY(-4px);
     background: var(--surface2);
     border: 1px solid var(--border);
     border-top: 2px solid var(--red);
@@ -399,13 +397,32 @@
     font-size: 12px;
   }
 
-  .tooltip-box::before {
+  /* Hacia abajo (primera mitad) */
+  .tooltip-below {
+    top: calc(100% + 8px);
+    transform: translateY(-4px);
+  }
+  .tooltip-below::before {
     content: '';
     position: absolute;
     bottom: 100%;
     left: 20px;
     border: 6px solid transparent;
     border-bottom-color: var(--border);
+  }
+
+  /* Hacia arriba (segunda mitad) */
+  .tooltip-above {
+    bottom: calc(100% + 8px);
+    transform: translateY(4px);
+  }
+  .tooltip-above::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 20px;
+    border: 6px solid transparent;
+    border-top-color: var(--border);
   }
 
   .tooltip-row {
@@ -508,7 +525,15 @@
     text-align: center;
   }
 
-  footer {
+  .rookie-badge {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--accent);
+    vertical-align: super;
+    letter-spacing: 0;
+    margin-left: 2px;
+    opacity: 0.8;
+  }
     text-align: center;
     padding: 24px 0 12px;
     font-size: 11px;
@@ -606,7 +631,7 @@ const RAW_DATA = [
   { name: 'Fernando Paez',       pts: [117, 114] },
   { name: 'Sofia Sanabria',      pts: [137,  90] },
   { name: 'Dario Scarano',       pts: [120, 107] },
-  { name: 'Colombo Mauricio',    pts: [105, 118] },
+  { name: 'Mauricio Colombo',    pts: [105, 118] },
   { name: 'Rodrigo Palazzo',     pts: [105, 114] },
   { name: 'Francisco Irigoyen',  pts: [102, 105] },
   { name: 'Adrian Mendonca',     pts: [104,  95] },
@@ -615,7 +640,7 @@ const RAW_DATA = [
   { name: 'Guido Alvarez',       pts: [ 85, 102] },
   { name: 'Ignacio Arana',       pts: [ 71,  99] },
   { name: 'Ignacio Salerno',     pts: [161,   0] },
-  { name: 'Lopez Mauro Eugenia', pts: [100,  61] },
+  { name: 'Eugenia Lopez Mauro', pts: [100,  61] },
   { name: 'Priscila Vargas',     pts: [ 74,  66] },
   { name: 'Ian Vivanco',         pts: [  0, 107] },
 ];
@@ -632,7 +657,7 @@ const TEAMS_RAW = [
   { name: 'Solanot / Paez',       p1: 'Sebastian Solanot',   p2: 'Fernando Paez'       },
   { name: 'Castro / Alvarez',     p1: 'Esteban Castro',      p2: 'Guido Alvarez'       },
   { name: 'Salerno / Manonelles', p1: 'Ignacio Salerno',     p2: 'Joan Manonelles'     },
-  { name: 'Mauricio / Eugenia',   p1: 'Colombo Mauricio',    p2: 'Lopez Mauro Eugenia' },
+  { name: 'Colombo / Lopez Mauro', p1: 'Mauricio Colombo',    p2: 'Eugenia Lopez Mauro' },
 ];
 
 const COLORS = [
@@ -649,7 +674,12 @@ const TEAM_COLORS = [
   '#ff4488','#44aaff'
 ];
 
-// ── BUILD PLAYERS ─────────────────────────────────────────────────────
+const ROOKIES = new Set([
+  'Agustin Fouce', 'Fabian Herrera', 'Natalia Finkelstein',
+  'Joan Manonelles', 'Fernando Paez', 'Dario Scarano',
+  'Mauricio Colombo', 'Adrian Mendonca', 'Guido Alvarez',
+  'Ignacio Salerno', 'Eugenia Lopez Mauro', 'Ian Vivanco'
+]);
 const players = RAW_DATA.map((p, i) => ({
   ...p,
   total: p.pts.reduce((a,b) => a+b, 0),
@@ -790,10 +820,11 @@ function buildRanking() {
       else trendHtml = `<span class="trend-same">—</span>`;
     }
 
-    // Tooltip con stats
+    // Tooltip — arriba si es la mitad inferior de la tabla
+    const tooltipDir = i >= players.length / 2 ? 'above' : 'below';
     const tooltip = `
-      <div class="tooltip-box">
-        <div class="tooltip-title">${p.name}</div>
+      <div class="tooltip-box tooltip-${tooltipDir}">
+        <div class="tooltip-title">${p.name}${ROOKIES.has(p.name) ? ' <span style="font-size:9px;color:var(--accent);font-weight:700">ROOKIE</span>' : ''}</div>
         ${RACES.map((r, ri) => `
           <div class="tooltip-row">
             <span class="tooltip-label">${r}</span>
@@ -818,7 +849,7 @@ function buildRanking() {
           <div class="tooltip-wrap">
             <div class="rank-name">
               <div class="color-dot" style="background:${p.color}"></div>
-              ${p.name}
+              ${p.name}${ROOKIES.has(p.name) ? '<span class="rookie-badge">R</span>' : ''}
               ${trendHtml}
             </div>
             ${tooltip}
@@ -894,14 +925,14 @@ function buildH2H() {
 
     return `
       <div class="h2h-row">
-        <div class="h2h-name ${p1wins ? 'winner' : 'loser'}">${t.p1.split(' ')[0]}</div>
+        <div class="h2h-name ${p1wins ? 'winner' : 'loser'}">${t.p1.split(' ')[0]}${ROOKIES.has(t.p1) ? '<span class="rookie-badge">R</span>' : ''}</div>
         <div class="h2h-pts ${p1wins ? 'winner' : 'loser'}">${t.p1total}</div>
         <div class="h2h-bar-wrap">
           <div class="h2h-bar-left" style="width:${p1pct}%;background:${t.color}"></div>
           <div class="h2h-bar-right" style="width:${p2pct}%;background:${t.color}"></div>
         </div>
         <div class="h2h-pts ${!p1wins ? 'winner' : 'loser'}">${t.p2total}</div>
-        <div class="h2h-name ${!p1wins ? 'winner' : 'loser'}" style="text-align:right">${t.p2.split(' ')[0]}</div>
+        <div class="h2h-name ${!p1wins ? 'winner' : 'loser'}" style="text-align:right">${t.p2.split(' ')[0]}${ROOKIES.has(t.p2) ? '<span class="rookie-badge">R</span>' : ''}</div>
       </div>
     `;
   }).join('');

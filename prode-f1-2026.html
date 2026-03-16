@@ -29,6 +29,7 @@
     font-family: 'Rajdhani', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
+    max-width: 100vw;
   }
 
   body::before {
@@ -101,8 +102,8 @@
   /* Stats */
   .stats-bar {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
     margin-bottom: 28px;
   }
 
@@ -217,6 +218,10 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+  }
+
+  @media (max-width: 500px) {
+    .last-gp-grid { grid-template-columns: 1fr; }
   }
 
   .last-gp-card {
@@ -543,8 +548,9 @@
   }
 
   @media (max-width: 640px) {
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
     .last-gp-grid { grid-template-columns: 1fr; }
-    .projection-grid { grid-template-columns: 1fr 1fr; }
+    .podium-section { grid-template-columns: repeat(3, 1fr); }
     .h2h-name { font-size: 11px; }
   }
 
@@ -752,7 +758,7 @@ function buildStats() {
     <div class="stat-card">
       <div class="stat-label">Más consistente</div>
       <div class="stat-value" style="font-size:13px">${mostConsistent.name.split(' ')[0].toUpperCase()}</div>
-      <div class="stat-sub">${Math.max(...mostConsistent.pts) - Math.min(...mostConsistent.pts)} pts de variación entre GPs</div>
+      <div class="stat-sub" style="font-size:10px">${Math.max(...mostConsistent.pts) - Math.min(...mostConsistent.pts)} pts de variación</div>
     </div>
   `;
 }

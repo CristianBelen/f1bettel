@@ -384,9 +384,9 @@
 
   .tooltip-box {
     position: absolute;
-    bottom: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%) translateY(4px);
+    top: calc(100% + 8px);
+    left: 0;
+    transform: translateY(-4px);
     background: var(--surface2);
     border: 1px solid var(--border);
     border-top: 2px solid var(--red);
@@ -399,14 +399,13 @@
     font-size: 12px;
   }
 
-  .tooltip-box::after {
+  .tooltip-box::before {
     content: '';
     position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 100%;
+    left: 20px;
     border: 6px solid transparent;
-    border-top-color: var(--border);
+    border-bottom-color: var(--border);
   }
 
   .tooltip-row {
@@ -538,7 +537,7 @@
       <div class="f1-badge">TEMPORADA 2026</div>
       <div class="f1-bar"></div>
     </div>
-    <h1>PRODE <span>F1</span> TRACKER</h1>
+    <h1>PRODE <span>F1</span> MIDEA CARRIER</h1>
     <div class="subtitle">Championship Evolution · 2026 · 24 Pilots · 2 Rounds</div>
   </header>
 
@@ -692,11 +691,11 @@ function buildStats() {
   const gap = leader.total - players[1].total;
   const hottest = [...players].sort((a,b) => b.pts[b.pts.length-1] - a.pts[a.pts.length-1])[0];
   const mostConsistent = [...players]
-    .filter(p => p.pts.every(x => x > 0)) // solo jugadores sin 0s
+    .filter(p => p.pts.every(x => x > 0))
     .sort((a,b) => {
-      const stdA = Math.sqrt(a.pts.reduce((s,p)=>s+Math.pow(p-a.avg,2),0)/a.pts.length);
-      const stdB = Math.sqrt(b.pts.reduce((s,p)=>s+Math.pow(p-b.avg,2),0)/b.pts.length);
-      return stdA - stdB;
+      const rangeA = Math.max(...a.pts) - Math.min(...a.pts);
+      const rangeB = Math.max(...b.pts) - Math.min(...b.pts);
+      return rangeA - rangeB;
     })[0];
 
   document.getElementById('statsBar').innerHTML = `
@@ -723,7 +722,7 @@ function buildStats() {
     <div class="stat-card">
       <div class="stat-label">Más consistente</div>
       <div class="stat-value" style="font-size:13px">${mostConsistent.name.split(' ')[0].toUpperCase()}</div>
-      <div class="stat-sub">prom. ${Math.round(mostConsistent.avg)} pts/GP</div>
+      <div class="stat-sub">${Math.max(...mostConsistent.pts) - Math.min(...mostConsistent.pts)} pts de variación entre GPs</div>
     </div>
   `;
 }
@@ -860,8 +859,8 @@ function buildTeamsStats() {
     </div>
     <div class="stat-card">
       <div class="stat-label">Mejor última fecha</div>
-      <div class="stat-value" style="font-size:11px">${hottest.name.split('/')[0].trim().toUpperCase()}</div>
-      <div class="stat-sub">${hottest.pts[hottest.pts.length-1]} pts en ${RACES[RACES.length-1]}</div>
+      <div class="stat-value" style="font-size:10px;letter-spacing:0px">${hottest.name}</div>
+      <div class="stat-sub">${hottest.pts[hottest.pts.length-1]} pts · ${hottest.p1.split(' ')[0]} + ${hottest.p2.split(' ')[0]}</div>
     </div>
   `;
 }

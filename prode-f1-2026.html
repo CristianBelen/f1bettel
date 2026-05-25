@@ -24,7 +24,25 @@
   h1 span { color: var(--red); }
   .subtitle { font-size: 14px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-top: 6px; }
 
-  /* Season Progress */
+  /* Premios */
+  .premios-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .premio-card { background: var(--surface); border: 1px solid var(--border); padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+  .premio-icon { font-size: 22px; flex-shrink: 0; }
+  .premio-info { flex: 1; min-width: 0; }
+  .premio-name { font-size: 14px; font-weight: 700; color: var(--text); }
+  .premio-detail { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .premio-monto { font-family: 'Orbitron', monospace; font-size: 16px; font-weight: 900; color: var(--green); flex-shrink: 0; }
+  .premios-table { background: var(--surface); border: 1px solid var(--border); overflow: hidden; margin-bottom: 20px; }
+  .premios-table-header { display: grid; grid-template-columns: 1fr 1fr 1fr 100px; gap: 8px; padding: 10px 16px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 10px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
+  .premios-table-row { display: grid; grid-template-columns: 1fr 1fr 1fr 100px; gap: 8px; padding: 10px 16px; border-bottom: 1px solid rgba(42,42,62,0.5); font-size: 13px; align-items: center; }
+  .premios-table-row:last-child { border-bottom: none; }
+  .premio-tipo-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 2px; display: inline-block; }
+  .badge-sprint { background: rgba(232,0,45,0.2); color: var(--red); }
+  .badge-gp { background: rgba(0,210,255,0.15); color: var(--accent); }
+  @media (max-width: 640px) {
+    .premios-table-header, .premios-table-row { grid-template-columns: 1fr 1fr 80px; }
+    .premios-table-header > *:nth-child(3), .premios-table-row > *:nth-child(3) { display: none; }
+  }
   .season-progress { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 12px 0; margin-bottom: 28px; width: 100%; position: relative; z-index: 1; }
   .season-progress-inner { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
   .season-progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -227,6 +245,11 @@
     <div id="teamsRankingTable"></div>
   </div>
 
+  <div class="section-divider" style="margin-top:40px"><span>💰 PREMIOS ACUMULADOS</span></div>
+
+  <!-- PREMIOS -->
+  <div id="premiosSection"></div>
+
   <footer>PRODE F1 2026 · Próxima: Mónaco 🏎️ · Temporada en curso</footer>
 </div>
 
@@ -347,12 +370,23 @@ function buildStats() {
   const mostConsistent = [...players].filter(p => p.pts.every(x => x > 0)).sort((a,b) => {
     return (Math.max(...a.pts)-Math.min(...a.pts)) - (Math.max(...b.pts)-Math.min(...b.pts));
   })[0];
+  // Mayor remontada última fecha
+  const rankBeforeLast = rankAtRace(RACES.length - 2);
+  const rankAfterLast = rankAtRace(RACES.length - 1);
+  const bestComeback = [...players].map(p => ({
+    name: p.name, color: p.color,
+    before: rankBeforeLast[p.name] || 0,
+    after: rankAfterLast[p.name] || 0,
+    gain: (rankBeforeLast[p.name]||0) - (rankAfterLast[p.name]||0)
+  })).sort((a,b) => b.gain - a.gain)[0];
+
   document.getElementById('statsBar').innerHTML = `
     <div class="stat-card"><div class="stat-label">Líder</div><div class="stat-value" style="font-size:14px">${leader.name.split(' ')[0].toUpperCase()}</div><div class="stat-sub">${leader.total} PTS</div></div>
     <div class="stat-card"><div class="stat-label">Ventaja</div><div class="stat-value">+${gap}</div><div class="stat-sub">sobre 2°</div></div>
     <div class="stat-card"><div class="stat-label">GPs jugados</div><div class="stat-value">${RACES.length}</div><div class="stat-sub">de ${TOTAL_GPS} en temporada</div></div>
     <div class="stat-card"><div class="stat-label">Mejor última fecha</div><div class="stat-value" style="font-size:13px">${hottest.name.split(' ')[0].toUpperCase()}</div><div class="stat-sub">${hottest.pts[hottest.pts.length-1]} pts en ${RACES[RACES.length-1]}</div></div>
     <div class="stat-card"><div class="stat-label">Más consistente</div><div class="stat-value" style="font-size:13px">${mostConsistent.name.split(' ')[0].toUpperCase()}</div><div class="stat-sub" style="font-size:10px">${Math.max(...mostConsistent.pts)-Math.min(...mostConsistent.pts)} pts de variación</div></div>
+    <div class="stat-card"><div class="stat-label">Mayor remontada</div><div class="stat-value" style="font-size:13px">${bestComeback.name.split(' ')[0].toUpperCase()}</div><div class="stat-sub" style="font-size:10px">▲${bestComeback.gain} · de ${bestComeback.before}° a ${bestComeback.after}°</div></div>
   `;
 }
 
@@ -472,10 +506,12 @@ function buildTeamsStats() {
   const leader = teams[0];
   const gap = leader.total - teams[1].total;
   const hottest = [...teams].sort((a,b) => b.pts[b.pts.length-1]-a.pts[a.pts.length-1])[0];
+  const mostBalanced = [...teams].sort((a,b) => Math.abs(a.p1total-a.p2total) - Math.abs(b.p1total-b.p2total))[0];
+  const balancedDiff = Math.abs(mostBalanced.p1total - mostBalanced.p2total);
   document.getElementById('teamsStatsBar').innerHTML = `
     <div class="stat-card"><div class="stat-label">Equipo Líder</div><div class="stat-value" style="font-size:12px">${leader.name}</div><div class="stat-sub">${leader.total} PTS</div></div>
     <div class="stat-card"><div class="stat-label">Ventaja</div><div class="stat-value">+${gap}</div><div class="stat-sub">sobre 2°</div></div>
-    <div class="stat-card"><div class="stat-label">Equipos</div><div class="stat-value">${teams.length}</div><div class="stat-sub">2 pilotos c/u</div></div>
+    <div class="stat-card"><div class="stat-label">Equipo más parejo</div><div class="stat-value" style="font-size:11px">${mostBalanced.name}</div><div class="stat-sub" style="font-size:10px">Solo ${balancedDiff} pts de diferencia</div></div>
     <div class="stat-card"><div class="stat-label">Mejor última fecha</div><div class="stat-value" style="font-size:10px">${hottest.name}</div><div class="stat-sub">${hottest.pts[hottest.pts.length-1]} pts · ${hottest.p1.split(' ')[0]} + ${hottest.p2.split(' ')[0]}</div></div>
   `;
 }
@@ -511,6 +547,64 @@ function buildTeamsRanking() {
   }).join('');
 }
 
+// ── PREMIOS ───────────────────────────────────────────────────────────
+const PREMIOS_DATA = [
+  { fecha: 'Australia (Sprint)', tipo: 'Sprint', ind1: 'Manuel Diaz', ind2: 'Agustin Fouce', eq1: 'Diaz / Finkelstein', eq2: 'Belen / Zanette' },
+  { fecha: 'China', tipo: 'GP', ind1: 'Cristian Belen', ind2: 'Mauricio Colombo', eq1: null, eq2: null },
+  { fecha: 'Japón', tipo: 'GP', ind1: 'Guido Alvarez', ind2: 'Sebastian Solanot', eq1: null, eq2: null },
+  { fecha: 'Miami', tipo: 'GP', ind1: 'Ignacio Arana', ind2: 'Priscila Vargas', eq1: null, eq2: null },
+  { fecha: 'Canadá (Sprint)', tipo: 'Sprint', ind1: 'Guido Alvarez', ind2: 'Ignacio Salerno', eq1: 'Castro / Alvarez', eq2: 'Salerno / Manonelles' },
+];
+const P_IND1=80000, P_IND2=40000, P_EQ1=80000, P_EQ2=40000;
+
+function buildPremios() {
+  const ganancias = {}, detalles = {};
+  const add = (name, monto, concepto) => {
+    if (!name) return;
+    ganancias[name] = (ganancias[name]||0) + monto;
+    if (!detalles[name]) detalles[name] = [];
+    detalles[name].push(concepto);
+  };
+  PREMIOS_DATA.forEach(p => {
+    add(p.ind1, P_IND1, '1° Ind. ' + p.fecha.replace(' (Sprint)',''));
+    add(p.ind2, P_IND2, '2° Ind. ' + p.fecha.replace(' (Sprint)',''));
+    if (p.eq1) {
+      const t1 = TEAMS_RAW.find(t => t.name === p.eq1);
+      const t2 = TEAMS_RAW.find(t => t.name === p.eq2);
+      if (t1) { add(t1.p1, P_EQ1/2, '1° Eq. ' + p.fecha.replace(' (Sprint)','')); add(t1.p2, P_EQ1/2, '1° Eq. ' + p.fecha.replace(' (Sprint)','')); }
+      if (t2) { add(t2.p1, P_EQ2/2, '2° Eq. ' + p.fecha.replace(' (Sprint)','')); add(t2.p2, P_EQ2/2, '2° Eq. ' + p.fecha.replace(' (Sprint)','')); }
+    }
+  });
+  const sorted = Object.entries(ganancias).sort((a,b) => b[1]-a[1]);
+  const total = sorted.reduce((s,[,v]) => s+v, 0);
+  const icons = ['🥇','🥈','🥉'];
+
+  const topCards = sorted.slice(0,3).map(([name, monto], i) => {
+    const pl = players.find(p => p.name === name);
+    return '<div class="premio-card"><div class="premio-icon">'+icons[i]+'</div><div class="premio-info"><div class="premio-name">'+name+'</div><div class="premio-detail">'+detalles[name].join(' · ')+'</div></div><div class="premio-monto">$'+monto.toLocaleString('es-AR')+'</div></div>';
+  }).join('');
+
+  const tableRows = PREMIOS_DATA.map(p => {
+    const badge = p.tipo==='Sprint' ? '<span class="premio-tipo-badge badge-sprint">Sprint</span>' : '<span class="premio-tipo-badge badge-gp">GP</span>';
+    const pozo = p.tipo==='Sprint' ? '$240.000' : '$120.000';
+    return '<div class="premios-table-row"><div>'+badge+' '+p.fecha.replace(' (Sprint)','')+'</div><div style="font-size:12px">🥇 '+p.ind1+'<br><span style="color:var(--muted)">🥈 '+p.ind2+'</span></div><div style="font-size:12px">'+(p.eq1 ? '🥇 '+p.eq1+'<br><span style="color:var(--muted)">🥈 '+p.eq2+'</span>' : '—')+'</div><div style="text-align:right;font-family:Orbitron,monospace;font-size:11px;color:var(--green)">'+pozo+'</div></div>';
+  }).join('');
+
+  const rankRows = sorted.map(([name, monto], i) => {
+    const pl = players.find(p => p.name === name);
+    const pct = Math.round((monto/sorted[0][1])*100);
+    const posClass = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
+    return '<div class="ranking-row" style="display:flex;align-items:center;gap:10px"><div class="rank-num '+posClass+'" style="min-width:32px">'+(i+1)+'</div><div style="flex:1;min-width:0"><div class="rank-name"><div class="color-dot" style="background:'+(pl?.color||'var(--muted)')+'"></div>'+name+'</div><div class="bar-bg" style="margin-top:4px"><div class="bar-fill" style="width:'+pct+'%;background:'+(pl?.color||'var(--green)')+'"></div></div></div><div style="text-align:right;flex-shrink:0"><div style="font-family:Orbitron,monospace;font-size:14px;font-weight:700;color:var(--green)">$'+monto.toLocaleString('es-AR')+'</div><div style="font-size:11px;color:var(--muted)">'+detalles[name].length+' premio'+(detalles[name].length>1?'s':'')+'</div></div></div>';
+  }).join('');
+
+  document.getElementById('premiosSection').innerHTML =
+    '<div class="premios-grid">'+topCards+'</div>'+
+    '<div class="stat-card" style="margin-bottom:16px;text-align:center"><div class="stat-label">Total distribuido hasta ahora</div><div class="stat-value" style="color:var(--green)">$'+total.toLocaleString('es-AR')+'</div><div class="stat-sub">de $3.840.000 en temporada</div></div>'+
+    '<div class="premios-table"><div class="premios-table-header"><div>FECHA</div><div>INDIVIDUAL</div><div>EQUIPO</div><div style="text-align:right">POZO</div></div>'+tableRows+'</div>'+
+    '<div class="section-divider"><span>RANKING DE GANANCIAS</span></div>'+
+    '<div class="ranking-section">'+rankRows+'</div>';
+}
+
 // INIT
 buildStats();
 buildSeasonProgress();
@@ -521,6 +615,7 @@ buildTeamsStats();
 buildTeamsPodium();
 buildH2H();
 buildTeamsRanking();
+buildPremios();
 </script>
 </body>
 </html>

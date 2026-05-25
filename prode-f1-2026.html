@@ -30,8 +30,11 @@
   .season-progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .season-progress-label { font-family: 'Orbitron', monospace; font-size: 10px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
   .season-progress-count { font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700; color: var(--red); }
-  .gp-dots { display: flex; gap: 4px; }
-  .gp-dot { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .gp-dots { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px; }
+  .gp-dots::-webkit-scrollbar { height: 3px; }
+  .gp-dots::-webkit-scrollbar-track { background: var(--border); border-radius: 2px; }
+  .gp-dots::-webkit-scrollbar-thumb { background: var(--red); border-radius: 2px; }
+  .gp-dot { flex: 0 0 auto; min-width: 36px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
   .gp-dot-bar { width: 100%; height: 6px; border-radius: 3px; }
   .gp-dot-bar.played { background: var(--red); }
   .gp-dot-bar.next { background: var(--red); animation: pulse 1.2s ease-in-out infinite; }

@@ -187,7 +187,7 @@
       <div class="f1-bar"></div>
     </div>
     <h1>PRODE <span>F1</span> MIDEA CARRIER</h1>
-    <div class="subtitle">Championship Evolution · 2026 · 24 Pilots · 11 Rounds · Próxima: Países Bajos 🏎️</div>
+    <div class="subtitle">Championship Evolution · 2026 · 24 Pilots · 12 Rounds · Próxima: Italia 🏃</div>
   </header>
   <div class="stats-bar" id="statsBar"></div>
 </div>
@@ -250,11 +250,11 @@
   <!-- PREMIOS -->
   <div id="premiosSection"></div>
 
-  <footer>PRODE F1 2026 · Próxima: Países Bajos 🏎️ · Temporada en curso</footer>
+  <footer>PRODE F1 2026 · Próxima: Italia Sprint 🏃 · Temporada en curso</footer>
 </div>
 
 <script>
-const RACES = ['Australia (Sprint)', 'China', 'Japón', 'Miami', 'Canadá (Sprint)', 'Mónaco', 'España (Sprint)', 'Austria', 'Gran Bretaña (Sprint)', 'Bélgica', 'Hungría'];
+const RACES = ['Australia (Sprint)', 'China', 'Japón', 'Miami', 'Canadá (Sprint)', 'Mónaco', 'España (Sprint)', 'Austria', 'Gran Bretaña (Sprint)', 'Bélgica', 'Hungría', 'Países Bajos'];
 const TOTAL_GPS = 22;
 
 const ALL_GPS = [
@@ -283,33 +283,33 @@ const ALL_GPS = [
   'Qatar',                 // 23 - 27/11
   'Abu Dhabi',             // 24 - 04/12
 ];
-const NEXT_GP = 'Países Bajos';
+const NEXT_GP = 'Italia (Sprint)';
 
 const RAW_DATA = [
-  { name: 'Agustin Fouce',       pts: [176, 111, 138, 128, 115,  91, 139, 160, 117, 156, 114] },
-  { name: 'Manuel Diaz',         pts: [180, 101, 124, 118, 123,  87, 156, 182, 139, 193, 140] },
-  { name: 'Cristian Belen',      pts: [153, 126, 118, 121, 125,  62, 124, 139, 139, 161, 138] },
-  { name: 'Carlos Zanette',      pts: [163, 111, 154, 126,  85, 102, 128,   0, 123, 186, 184] },
-  { name: 'Diego Pereyra',       pts: [162, 100, 145, 131, 114,  91, 164, 176, 102, 140, 177] },
-  { name: 'Fabian Herrera',      pts: [151, 108, 146,   0,  91,  86, 118, 145,  97, 156, 126] },
-  { name: 'Natalia Finkelstein', pts: [141, 112, 163, 147,  95,  88, 130, 153, 122, 163, 149] },
-  { name: 'Sebastian Solanot',   pts: [139, 102, 166, 123, 103,  84, 147, 150, 105, 173, 193] },
-  { name: 'Joan Manonelles',     pts: [121, 111, 124, 123, 104,  61,   0, 150, 142, 169, 139] },
-  { name: 'Fernando Paez',       pts: [117, 114, 159, 127,  95,  89, 142, 171, 116, 173, 154] },
-  { name: 'Sofia Sanabria',      pts: [137,  90, 124, 156,  93,  88, 122, 145, 140, 142, 141] },
-  { name: 'Dario Scarano',       pts: [120, 107, 148,   0, 129,  61, 127, 116, 104, 137, 130] },
-  { name: 'Mauricio Colombo',    pts: [105, 118, 138, 119,  98,  59,  77, 156,   0, 116, 141] },
-  { name: 'Rodrigo Palazzo',     pts: [105, 114, 156, 118,  93,  49, 108, 151, 137, 192,   0] },
-  { name: 'Francisco Irigoyen',  pts: [102, 105, 140, 129,  83,  81, 128, 158, 133, 147, 109] },
-  { name: 'Adrian Mendonca',     pts: [104,  95, 123, 148, 118,  82, 126, 111,  98, 163, 141] },
-  { name: 'Esteban Castro',      pts: [100,  98, 133, 127, 103,  86,   0, 104, 117, 164,   0] },
-  { name: 'Gabriela Labanca',    pts: [ 92, 103, 135, 129,  92,  95, 130, 136, 126, 183, 160] },
-  { name: 'Guido Alvarez',       pts: [ 85, 102, 169, 121, 131,  67,   0, 114,  91,   0, 142] },
-  { name: 'Ignacio Arana',       pts: [ 71,  99,  84, 170, 106,  97, 112, 120,  87, 135, 128] },
-  { name: 'Ignacio Salerno',     pts: [161,   0, 153, 141, 130,  54, 174, 139, 132, 176, 132] },
-  { name: 'Eugenia Lopez Mauro', pts: [100,  61,  89,   0, 101,  66, 160, 152,   0,   0, 122] },
-  { name: 'Priscila Vargas',     pts: [ 74,  66, 114, 166,  98,  48,  91, 150, 143,   0, 115] },
-  { name: 'Ian Vivanco',         pts: [  0, 107, 115, 120, 111,  71, 109, 129, 123, 168, 137] },
+  { name: 'Agustin Fouce',       pts: [176, 111, 138, 128, 115,  91, 139, 160, 117, 156, 114, 108] },
+  { name: 'Manuel Diaz',         pts: [180, 101, 124, 118, 123,  87, 156, 182, 139, 193, 140, 127] },
+  { name: 'Cristian Belen',      pts: [153, 126, 118, 121, 125,  62, 124, 139, 139, 161, 138, 139] },
+  { name: 'Carlos Zanette',      pts: [163, 111, 154, 126,  85, 102, 128,   0, 123, 186, 184, 124] },
+  { name: 'Diego Pereyra',       pts: [162, 100, 145, 131, 114,  91, 164, 176, 102, 140, 177, 105] },
+  { name: 'Fabian Herrera',      pts: [151, 108, 146,   0,  91,  86, 118, 145,  97, 156, 126, 120] },
+  { name: 'Natalia Finkelstein', pts: [141, 112, 163, 147,  95,  88, 130, 153, 122, 163, 149, 102] },
+  { name: 'Sebastian Solanot',   pts: [139, 102, 166, 123, 103,  84, 147, 150, 105, 173, 193, 134] },
+  { name: 'Joan Manonelles',     pts: [121, 111, 124, 123, 104,  61,   0, 150, 142, 169, 139, 165] },
+  { name: 'Fernando Paez',       pts: [117, 114, 159, 127,  95,  89, 142, 171, 116, 173, 154, 123] },
+  { name: 'Sofia Sanabria',      pts: [137,  90, 124, 156,  93,  88, 122, 145, 140, 142, 141, 115] },
+  { name: 'Dario Scarano',       pts: [120, 107, 148,   0, 129,  61, 127, 116, 104, 137, 130, 122] },
+  { name: 'Mauricio Colombo',    pts: [105, 118, 138, 119,  98,  59,  77, 156,   0, 116, 141, 132] },
+  { name: 'Rodrigo Palazzo',     pts: [105, 114, 156, 118,  93,  49, 108, 151, 137, 192,   0, 102] },
+  { name: 'Francisco Irigoyen',  pts: [102, 105, 140, 129,  83,  81, 128, 158, 133, 147, 109, 138] },
+  { name: 'Adrian Mendonca',     pts: [104,  95, 123, 148, 118,  82, 126, 111,  98, 163, 141, 119] },
+  { name: 'Esteban Castro',      pts: [100,  98, 133, 127, 103,  86,   0, 104, 117, 164,   0,   0] },
+  { name: 'Gabriela Labanca',    pts: [ 92, 103, 135, 129,  92,  95, 130, 136, 126, 183, 160, 153] },
+  { name: 'Guido Alvarez',       pts: [ 85, 102, 169, 121, 131,  67,   0, 114,  91,   0, 142, 125] },
+  { name: 'Ignacio Arana',       pts: [ 71,  99,  84, 170, 106,  97, 112, 120,  87, 135, 128, 128] },
+  { name: 'Ignacio Salerno',     pts: [161,   0, 153, 141, 130,  54, 174, 139, 132, 176, 132, 125] },
+  { name: 'Eugenia Lopez Mauro', pts: [100,  61,  89,   0, 101,  66, 160, 152,   0,   0, 122, 155] },
+  { name: 'Priscila Vargas',     pts: [ 74,  66, 114, 166,  98,  48,  91, 150, 143,   0, 115, 140] },
+  { name: 'Ian Vivanco',         pts: [  0, 107, 115, 120, 111,  71, 109, 129, 123, 168, 137, 108] },
 ];
 
 const TEAMS_RAW = [
@@ -560,6 +560,7 @@ const PREMIOS_DATA = [
   { fecha: 'Gran Bretaña (Sprint)', tipo: 'Sprint', ind1: 'Priscila Vargas', ind2: 'Joan Manonelles', eq1: 'Salerno / Manonelles', eq2: 'Irigoyen / Sanabria' },
   { fecha: 'Bélgica', tipo: 'GP', ind1: 'Manuel Diaz', ind2: 'Rodrigo Palazzo', eq1: null, eq2: null },
   { fecha: 'Hungría', tipo: 'GP', ind1: 'Sebastian Solanot', ind2: 'Carlos Zanette', eq1: null, eq2: null },
+  { fecha: 'Países Bajos', tipo: 'GP', ind1: 'Joan Manonelles', ind2: 'Eugenia Lopez Mauro', eq1: null, eq2: null },
 ];
 const P_IND1=80000, P_IND2=40000, P_EQ1=80000, P_EQ2=40000;
 
